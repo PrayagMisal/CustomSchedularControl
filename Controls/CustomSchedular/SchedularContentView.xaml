@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Frame
+    x:Class="CustomSchedularControl.Controls.CustomSchedular.SchedularContentView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:customSchedular="clr-namespace:CustomSchedularControl.Controls.CustomSchedular"
+    Padding="0"
+    x:DataType="customSchedular:SchedularItemModel"
+    CornerRadius="7"
+    IsClippedToBounds="True"
+    VerticalOptions="Center">
+    <Grid ColumnDefinitions="5,*">
+        <BoxView x:Name="BoxViewLineColor" Color="{Binding CardLineColor}" />
+        <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto">
+            <!--  Title  -->
+            <Label x:Name="LblTitle" Text="{Binding Title}" />
+            <!--  Description  -->
+            <Label
+                x:Name="LblDescription"
+                Grid.Row="1"
+                Text="{Binding Description}" />
+            <!--  Duration section  -->
+            <Grid Grid.Row="2" />
+        </Grid>
+    </Grid>
+</Frame>

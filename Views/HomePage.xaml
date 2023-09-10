@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CustomSchedularControl.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:Cc="clr-namespace:CustomSchedularControl.Controls.CustomSchedular"
+    xmlns:viewModels="clr-namespace:CustomSchedularControl.ViewModels"
+    Title="HomePage"
+    x:DataType="viewModels:HomeViewModel">
+    <ContentPage.BindingContext>
+        <viewModels:HomeViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid
+            Padding="10"
+            RowDefinitions="*,Auto"
+            RowSpacing="10">
+            <Cc:CustomSchedularControl ItemsSource="{Binding SchedularItems}" RowHeightPerInterval="150" />
+            <!--<Button
+                Grid.Row="1"
+                Command="{Binding AddItemCommand}"
+                Text="Add Item" />-->
+            <!--<Picker
+                Grid.Row="1"
+                ItemDisplayBinding="{Binding}"
+                ItemsSource="{Binding RowHeightItems}"
+                SelectedItem="{Binding RowHeight}" />-->
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
