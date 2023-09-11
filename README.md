@@ -10,7 +10,5 @@ Some know issue and work in progress is
 2) If a card start at end of day then further space addition for the card is required.
 
 Tested so far in android only...
-
-#Screenshots
-
+# Screenshots
 <img src="https://github.com/PrayagMisal/CustomSchedularControl/blob/master/pic1.png" width="280" height="500">
