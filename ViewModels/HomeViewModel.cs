@@ -34,7 +34,7 @@ namespace CustomSchedularControl.ViewModels
             {
                 CardLineColor = Colors.Red,
                 StartTime = new DateTime(2023, 9, 10, 2, 30, 0),
-                EndTime = new DateTime(2023, 9, 10, 3, 0, 0),
+                EndTime = new DateTime(2023, 9, 10, 2, 31, 0),
                 Title = "Title 2",
                 Description = "Lorem Ipsum Dolor sit amet, Lorem Ipsum dolor sit amet..."
             });
@@ -44,6 +44,30 @@ namespace CustomSchedularControl.ViewModels
                 StartTime = new DateTime(2023, 9, 10, 16, 0, 0),
                 EndTime = new DateTime(2023, 9, 10, 17, 25, 0),
                 Title = "Title 3",
+                Description = "Lorem Ipsum Dolor sit amet, Lorem Ipsum dolor sit amet..."
+            });
+            SchedularItems.Add(new SchedularItemModel
+            {
+                CardLineColor = Colors.Yellow,
+                StartTime = new DateTime(2023, 9, 10, 6, 0, 0),
+                EndTime = new DateTime(2023, 9, 10, 7, 10, 0),
+                Title = "Title 4",
+                Description = "Lorem Ipsum Dolor sit amet, Lorem Ipsum dolor sit amet..."
+            });
+            SchedularItems.Add(new SchedularItemModel
+            {
+                CardLineColor = Colors.HotPink,
+                StartTime = new DateTime(2023, 9, 10, 6, 10, 0),
+                EndTime = new DateTime(2023, 9, 10, 6, 55, 0),
+                Title = "Title 5",
+                Description = "Lorem Ipsum Dolor sit amet, Lorem Ipsum dolor sit amet..."
+            });
+            SchedularItems.Add(new SchedularItemModel
+            {
+                CardLineColor = Colors.Coral,
+                StartTime = new DateTime(2023, 9, 10, 9, 20, 0),
+                EndTime = new DateTime(2023, 9, 10, 12, 35, 0),
+                Title = "Title 6",
                 Description = "Lorem Ipsum Dolor sit amet, Lorem Ipsum dolor sit amet..."
             });
             //AddItemCommand = new Command(() => 

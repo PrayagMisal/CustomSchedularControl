@@ -2,4 +2,39 @@
 <Frame
     x:Class="CustomSchedularControl.Controls.CustomSchedular.SchedularContentViewForLessDuration"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" />
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:CustomSchedularControl.Controls.CustomSchedular"
+    Margin="0,0,10,0"
+    Padding="0"
+    HeightRequest="60"
+    IsClippedToBounds="True"
+    VerticalOptions="Start">
+    <Grid
+        x:Name="BaseGrid"
+        ColumnDefinitions="7,*"
+        ColumnSpacing="5">
+        <BoxView
+            x:Name="BoxViewLineColor"
+            HeightRequest="7"
+            VerticalOptions="Start" />
+        <Grid Grid.Column="1" RowDefinitions="Auto,Auto">
+            <!--  Description  -->
+            <Label x:Name="LblDescription" />
+            <!--  Duration section  -->
+            <Grid
+                Grid.Row="1"
+                Margin="0,0,5,0"
+                ColumnDefinitions="Auto,Auto"
+                ColumnSpacing="5"
+                HorizontalOptions="End">
+                <Path
+                    x:Name="PathClockIcon"
+                    helpers:Helper.StringPathData="{x:Static helpers:Helper.FilledClock}"
+                    Aspect="Uniform"
+                    HeightRequest="15"
+                    WidthRequest="15" />
+                <Label x:Name="LblDuration" Grid.Column="1" />
+            </Grid>
+        </Grid>
+    </Grid>
+</Frame>

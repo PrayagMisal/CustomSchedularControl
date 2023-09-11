@@ -1,4 +1,6 @@
+using Microsoft.Maui.Controls.Shapes;
 using System.Collections.ObjectModel;
+using Timer = System.Timers.Timer;
 
 namespace CustomSchedularControl.Controls.CustomSchedular;
 
@@ -7,6 +9,17 @@ public partial class CustomSchedularControl
     List<RowDefinition> _rowDefinitions = new(), _rowDefinitionsWithWhiteSpace = new();
     List<BoxView> _separators = new();
     List<Label> _timingLabels = new();
+
+    Line _currentTimeDashedLine = new()
+    {
+        Stroke = new SolidColorBrush(Color.FromArgb("#b3ff0000")),
+        StrokeDashArray = new DoubleCollection(new double[] { 4, 4 }),
+        StrokeDashOffset = 1,
+        StrokeThickness = 1.5
+    };
+
+    bool _firstTimeScrollingDone = false;
+    Timer _timer = new(60000);
 
     ObservableCollection<SchedularItemModel> _schedularItems;
 
@@ -51,6 +64,13 @@ public partial class CustomSchedularControl
         }
 
         SetSeperatorColor(Colors.LightGray);
+
+        _timer.Elapsed += _timer_Elapsed;
+    }
+
+    private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    {
+        AddCurrentTimeLine();
     }
 
     public static readonly BindableProperty RowHeightPerIntervalProperty = BindableProperty.Create(nameof(RowHeightPerInterval), typeof(double), typeof(CustomSchedularControl), defaultBindingMode: BindingMode.TwoWay,
@@ -185,12 +205,13 @@ public partial class CustomSchedularControl
     {
         try
         {
-            SchedularContentView schedularContentView = new(schedularItemModel);
-            PlacementInfo placementInfo = GetStartAndEndRow(schedularItemModel);
+            PlacementInfo placementInfo = GetPlacementInfo(schedularItemModel);
+            Frame schedularContentView = placementInfo.HeightOfCard < 70 ? new SchedularContentViewForLessDuration(schedularItemModel)
+                : new SchedularContentView(schedularItemModel);
             Grid.SetRow(schedularContentView, placementInfo.StartRowNumber);
-            Grid.SetRowSpan(schedularContentView, placementInfo.RowSpan);
+            Grid.SetRowSpan(schedularContentView, schedularContentView is SchedularContentView ? placementInfo.RowSpan : 2);
             Grid.SetColumn(schedularContentView, 2);
-            schedularContentView.Margin = new Thickness(0, placementInfo.TopMargin, 0, placementInfo.BottomMargin);
+            schedularContentView.Margin = new Thickness(0, placementInfo.TopMargin, 0, schedularContentView is SchedularContentView ? placementInfo.BottomMargin : 0);
             SchedularGrid.Children.Add(schedularContentView);
         }
         catch (Exception exc)
@@ -210,13 +231,54 @@ public partial class CustomSchedularControl
         }
     }
 
-    private PlacementInfo GetStartAndEndRow(SchedularItemModel schedularItemModel)
+    private void AddCurrentTimeLine()
+    {
+        try
+        {
+            TimeOnly currentTime = TimeOnly.FromDateTime(DateTime.Now);
+            int startRow = currentTime switch
+            {
+                { Hour: 0 } => 1,
+                { Hour: var h } => h * 2 + 1
+            };
+            double topPercentage = ((double)currentTime.Minute / 60) * 100;
+            double topMargin = (topPercentage * RowHeightPerInterval) / 100;
+
+            _currentTimeDashedLine.X1 = 0;
+            _currentTimeDashedLine.X1 = 500;
+            _currentTimeDashedLine.Y1 = topMargin;
+            _currentTimeDashedLine.Y2 = topMargin;
+
+            Grid.SetRow(_currentTimeDashedLine, startRow);
+            Grid.SetColumnSpan(_currentTimeDashedLine, 3);
+            SchedularGrid.Children.Remove(_currentTimeDashedLine);
+            SchedularGrid.Children.Add(_currentTimeDashedLine);
+            if (_firstTimeScrollingDone == false)
+            {
+                _firstTimeScrollingDone = true;
+                Task.Run(async() => 
+                {
+                    await Task.Delay(1000);
+                    await MainThread.InvokeOnMainThreadAsync(async () => 
+                    {
+                        await BaseScrollView.ScrollToAsync(_currentTimeDashedLine, ScrollToPosition.Center, true);
+                    });
+                });
+            }
+        }
+        catch (Exception exc)
+        {
+
+        }
+    }
+
+    private PlacementInfo GetPlacementInfo(SchedularItemModel schedularItemModel)
     {
         DateTime startTime = schedularItemModel.StartTime;
         DateTime endTime = schedularItemModel.EndTime;
 
         int startRow, endRow, rowspan = 1;
-        double topMargin, bottomMargin;
+        double topMargin, bottomMargin, heightOfCard;
 
         startRow = startTime switch
         {
@@ -227,12 +289,20 @@ public partial class CustomSchedularControl
         endRow = endTime switch
         {
             { Hour: 0 } => 1,
+            { Hour: var h, Minute: var m } when m == 0 => h * 2 - 1,
             { Hour: var h } => h * 2 + 1
         };
 
-        topMargin = (startTime.Minute / 60) * 100;
-        bottomMargin = (endTime.Minute / 60) * 100;
+        //getting percentage to add appropriate margin to our card
+        double topPercentage = ((double)startTime.Minute / 60) * 100;
+        double bottomPercentage = ((double)endTime.Minute / 60) * 100;
 
+        bottomPercentage = bottomPercentage > 0 ? 100 - bottomPercentage : bottomPercentage;
+
+        topMargin = (topPercentage * RowHeightPerInterval) / 100;
+        bottomMargin = (bottomPercentage * RowHeightPerInterval) / 100;
+
+        //Getting how many rows it will cover...
         int i = startRow;
         while (i < endRow)
         {
@@ -240,8 +310,11 @@ public partial class CustomSchedularControl
             i++;
         }
 
-        if (rowspan > 1)
-            rowspan = rowspan + (rowspan - 1);
+        //Calculating the height of card...
+        heightOfCard = (RowHeightPerInterval * rowspan) - (topMargin + bottomMargin);
+
+        //if (rowspan > 1)
+        //    rowspan = rowspan + (rowspan - 1);
 
         return new PlacementInfo
         {
@@ -249,7 +322,18 @@ public partial class CustomSchedularControl
             EndRowNumber = endRow,
             TopMargin = topMargin,
             BottomMargin = bottomMargin,
-            RowSpan = rowspan
+            RowSpan = rowspan,
+            HeightOfCard = heightOfCard
         };
+    }
+
+    public void StartUpdatingCurrentTimeDashedLine()
+    {
+        AddCurrentTimeLine();
+        _timer.Start();
+    }
+    public void StopUpdatingCurrentTimeDashedLine()
+    {
+        _timer.Stop();
     }
 }

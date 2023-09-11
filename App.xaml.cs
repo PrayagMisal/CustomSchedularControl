@@ -8,7 +8,7 @@ namespace CustomSchedularControl
         {
             InitializeComponent();
 
-            MainPage = new HomePage();
+            MainPage = new DemoPage();
         }
     }
 }

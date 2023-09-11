@@ -15,7 +15,10 @@
             Padding="10"
             RowDefinitions="*,Auto"
             RowSpacing="10">
-            <Cc:CustomSchedularControl ItemsSource="{Binding SchedularItems}" RowHeightPerInterval="150" />
+            <Cc:CustomSchedularControl
+                x:Name="SchedularControl"
+                ItemsSource="{Binding SchedularItems}"
+                RowHeightPerInterval="150" />
             <!--<Button
                 Grid.Row="1"
                 Command="{Binding AddItemCommand}"
