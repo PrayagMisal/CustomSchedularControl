@@ -8,6 +8,7 @@ Work done so far...
 Some know issue and work in progress is
 1) Overlapping of cards issue is pending.
 2) If a card start at end of day then further space addition for the card is required.
+3) Observable collection(ItemsSource property) synchronization is pending.
 
 Tested so far in android only...
 # Screenshots
