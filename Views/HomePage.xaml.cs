@@ -1,3 +1,5 @@
+using CustomSchedularControl.ViewModels;
+
 namespace CustomSchedularControl.Views;
 
 public partial class HomePage 
@@ -6,6 +8,5 @@ public partial class HomePage
 	{
 		InitializeComponent();
         SchedularControl.StartUpdatingCurrentTimeDashedLine();
-
     }
 }

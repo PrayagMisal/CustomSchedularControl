@@ -1,4 +1,6 @@
 ﻿using CustomSchedularControl.Controls.CustomSchedular;
+using CustomSchedularControl.Views;
+using Mopups.Services;
 using System.Collections.ObjectModel;
 
 namespace CustomSchedularControl.ViewModels
@@ -18,6 +20,9 @@ namespace CustomSchedularControl.ViewModels
         public ObservableCollection<double> RowHeightItems { get; } = new() { 100, 200, 300 };
 
         public ObservableCollection<SchedularItemModel> SchedularItems { get; } = new();
+
+        public Command AddCommand { get; }
+        public Command RemoveCommand { get; }
 
         //public Command AddItemCommand { get; }
         public HomeViewModel()
@@ -41,8 +46,8 @@ namespace CustomSchedularControl.ViewModels
             SchedularItems.Add(new SchedularItemModel
             {
                 CardLineColor = Colors.Brown,
-                StartTime = new DateTime(2023, 9, 10, 16, 0, 0),
-                EndTime = new DateTime(2023, 9, 10, 17, 25, 0),
+                StartTime = new DateTime(2023, 9, 10, 3, 0, 0),
+                EndTime = new DateTime(2023, 9, 10, 4, 25, 0),
                 Title = "Title 3",
                 Description = "Lorem Ipsum Dolor sit amet, Lorem Ipsum dolor sit amet..."
             });
@@ -65,8 +70,8 @@ namespace CustomSchedularControl.ViewModels
             SchedularItems.Add(new SchedularItemModel
             {
                 CardLineColor = Colors.Coral,
-                StartTime = new DateTime(2023, 9, 10, 9, 20, 0),
-                EndTime = new DateTime(2023, 9, 10, 12, 35, 0),
+                StartTime = new DateTime(2023, 9, 10, 18, 10, 0),
+                EndTime = new DateTime(2023, 9, 10, 19, 35, 0),
                 Title = "Title 6",
                 Description = "Lorem Ipsum Dolor sit amet, Lorem Ipsum dolor sit amet..."
             });
@@ -75,6 +80,41 @@ namespace CustomSchedularControl.ViewModels
             //    SchedularItems.Add(new());
             //});
             RowHeight = RowHeightItems.FirstOrDefault();
+            AddCommand = new(AddCommandMethod);
+            RemoveCommand = new(RemoveCommandMethod);
+        }
+
+        private void AddCommandMethod()
+        {
+            try
+            {
+                MopupService.Instance.PushAsync(new AddSchedularItemPage()
+                {
+                    BindingContext = new AddSchedularItemViewModel
+                    {
+                        HomeViewModel = this
+                    }
+                });
+            }
+            catch (Exception exc)
+            {
+
+            }
+        }
+        private void RemoveCommandMethod()
+        {
+            try
+            {
+                SchedularItems.Remove(SchedularItems.First());
+            }
+            catch (Exception exc)
+            {
+
+            }
+        }
+        public void AddSchedularItem(SchedularItemModel model)
+        {
+            SchedularItems.Add(model);
         }
     }
 }

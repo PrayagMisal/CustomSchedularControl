@@ -1,5 +1,10 @@
 ﻿using CommunityToolkit.Maui;
+using CustomSchedularControl.ViewModels;
+using CustomSchedularControl.Views;
 using Microsoft.Extensions.Logging;
+using Mopups.Hosting;
+using Mopups.Interfaces;
+using Mopups.Services;
 
 namespace CustomSchedularControl
 {
@@ -15,8 +20,10 @@ namespace CustomSchedularControl
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
-
+                })
+                .ConfigureMopups();
+            builder.Services.AddTransient<HomePage>();
+            builder.Services.AddTransient<HomeViewModel>();
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif

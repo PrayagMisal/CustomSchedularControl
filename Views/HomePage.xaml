@@ -19,15 +19,17 @@
                 x:Name="SchedularControl"
                 ItemsSource="{Binding SchedularItems}"
                 RowHeightPerInterval="150" />
-            <!--<Button
+            <!--  Add and remove button  -->
+            <Grid
                 Grid.Row="1"
-                Command="{Binding AddItemCommand}"
-                Text="Add Item" />-->
-            <!--<Picker
-                Grid.Row="1"
-                ItemDisplayBinding="{Binding}"
-                ItemsSource="{Binding RowHeightItems}"
-                SelectedItem="{Binding RowHeight}" />-->
+                ColumnDefinitions="*,*"
+                ColumnSpacing="10">
+                <Button Command="{Binding AddCommand}" Text="Add" />
+                <Button
+                    Grid.Column="1"
+                    Command="{Binding RemoveCommand}"
+                    Text="Remove" />
+            </Grid>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

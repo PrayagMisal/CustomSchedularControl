@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage
+    x:Class="CustomSchedularControl.Views.AddSchedularItemPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+    xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+    xmlns:viewModels="clr-namespace:CustomSchedularControl.ViewModels"
+    x:DataType="viewModels:AddSchedularItemViewModel"
+    BackgroundColor="#80000000"
+    CloseWhenBackgroundIsClicked="False">
+    <mopups:PopupPage.Animation>
+        <Animations:MoveAnimation
+            DurationIn="250"
+            DurationOut="250"
+            PositionIn="Center"
+            PositionOut="Center" />
+    </mopups:PopupPage.Animation>
+    <mopups:PopupPage.Content>
+        <Frame Margin="10,0" VerticalOptions="Center">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                <Label
+                    FontSize="Large"
+                    HorizontalOptions="Center"
+                    Text="Schedular Item" />
+                <!--  Title  -->
+                <Label Grid.Row="1" Text="Title" />
+                <Entry
+                    Grid.Row="2"
+                    Placeholder="Title"
+                    Text="{Binding Title}" />
+                <!--  Description  -->
+                <Label Grid.Row="3" Text="Description" />
+                <Editor
+                    Grid.Row="4"
+                    HeightRequest="100"
+                    Placeholder="Type Description"
+                    Text="{Binding Description}" />
+                <Grid
+                    Grid.Row="5"
+                    ColumnDefinitions="*,*"
+                    ColumnSpacing="10"
+                    RowDefinitions="Auto,Auto">
+                    <!--  From time  -->
+                    <Label Text="From Time" />
+                    <TimePicker Grid.Row="1" Time="{Binding FromTime}" />
+                    <!--  To time  -->
+                    <Label Grid.Column="1" Text="To Time" />
+                    <TimePicker
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Time="{Binding ToTime}" />
+                </Grid>
+                <!--  Color  -->
+                <Label Grid.Row="6" Text="Color" />
+                <Entry
+                    Grid.Row="7"
+                    Placeholder="Type color in hex"
+                    Text="{Binding ColorInHex}" />
+                <!--  Cancel and Add button  -->
+                <Grid
+                    Grid.Row="8"
+                    ColumnDefinitions="*,*"
+                    ColumnSpacing="10">
+                    <!--  Add button  -->
+                    <Button Command="{Binding AddCommand}" Text="Add" />
+                    <!--  Cancel button  -->
+                    <Button
+                        Grid.Column="1"
+                        Command="{Binding CancelCommand}"
+                        Text="Cancel" />
+                </Grid>
+            </Grid>
+        </Frame>
+    </mopups:PopupPage.Content>
+</mopups:PopupPage>

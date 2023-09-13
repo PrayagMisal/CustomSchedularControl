@@ -9,6 +9,7 @@ public partial class CustomSchedularControl
     List<RowDefinition> _rowDefinitions = new(), _rowDefinitionsWithWhiteSpace = new();
     List<BoxView> _separators = new();
     List<Label> _timingLabels = new();
+    List<Frame> _schedularItemsFrame = new();
 
     Line _currentTimeDashedLine = new()
     {
@@ -197,7 +198,16 @@ public partial class CustomSchedularControl
     {
         lock (_schedularItemManagementLock)
         {
-
+            if (e.NewItems is not null and { Count: > 0 })
+            {
+                foreach (SchedularItemModel schedularItemToAdd in e.NewItems)
+                    AdjustSchedularItem(schedularItemToAdd);
+            }
+            if (e.OldItems is not null and { Count: > 0 })
+            {
+                foreach (SchedularItemModel schedularItemToRemove in e.OldItems)
+                    RemoveSchedularItem(schedularItemToRemove);
+            }
         }
     }
 
@@ -213,6 +223,9 @@ public partial class CustomSchedularControl
             Grid.SetColumn(schedularContentView, 2);
             schedularContentView.Margin = new Thickness(0, placementInfo.TopMargin, 0, schedularContentView is SchedularContentView ? placementInfo.BottomMargin : 0);
             SchedularGrid.Children.Add(schedularContentView);
+            //Right now we are not using mvvm pattern in view but, it's for finding the item...
+            schedularContentView.BindingContext = schedularItemModel;
+            _schedularItemsFrame.Add(schedularContentView);
         }
         catch (Exception exc)
         {
@@ -223,7 +236,12 @@ public partial class CustomSchedularControl
     {
         try
         {
-
+            Frame itemToRemove = _schedularItemsFrame.FirstOrDefault(s => s.BindingContext == schedularItemModel);
+            if (itemToRemove is not null)
+            {
+                SchedularGrid.Children.Remove(itemToRemove);
+                _schedularItemsFrame.Remove(itemToRemove);
+            }
         }
         catch (Exception exc)
         {
@@ -253,13 +271,14 @@ public partial class CustomSchedularControl
             Grid.SetColumnSpan(_currentTimeDashedLine, 3);
             SchedularGrid.Children.Remove(_currentTimeDashedLine);
             SchedularGrid.Children.Add(_currentTimeDashedLine);
+            var zindex = _currentTimeDashedLine.ZIndex;
             if (_firstTimeScrollingDone == false)
             {
                 _firstTimeScrollingDone = true;
-                Task.Run(async() => 
+                Task.Run(async () =>
                 {
                     await Task.Delay(1000);
-                    await MainThread.InvokeOnMainThreadAsync(async () => 
+                    await MainThread.InvokeOnMainThreadAsync(async () =>
                     {
                         await BaseScrollView.ScrollToAsync(_currentTimeDashedLine, ScrollToPosition.Center, true);
                     });
