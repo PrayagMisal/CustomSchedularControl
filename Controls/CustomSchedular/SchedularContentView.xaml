@@ -6,8 +6,10 @@
     xmlns:helpers="clr-namespace:CustomSchedularControl.Controls.CustomSchedular"
     Margin="0,0,10,0"
     Padding="0"
+    HasShadow="False"
     IsClippedToBounds="True"
-    VerticalOptions="Center">
+    VerticalOptions="Center"
+    ZIndex="1">
     <Grid
         x:Name="BaseGrid"
         ColumnDefinitions="7,*"

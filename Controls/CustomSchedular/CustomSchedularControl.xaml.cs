@@ -16,7 +16,8 @@ public partial class CustomSchedularControl
         Stroke = new SolidColorBrush(Color.FromArgb("#b3ff0000")),
         StrokeDashArray = new DoubleCollection(new double[] { 4, 4 }),
         StrokeDashOffset = 1,
-        StrokeThickness = 1.5
+        StrokeThickness = 1.5,
+        ZIndex = 2
     };
 
     bool _firstTimeScrollingDone = false;
@@ -71,7 +72,10 @@ public partial class CustomSchedularControl
 
     private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
-        AddCurrentTimeLine();
+        MainThread.InvokeOnMainThreadAsync(() => 
+        {
+            AddCurrentTimeLine();
+        });
     }
 
     public static readonly BindableProperty RowHeightPerIntervalProperty = BindableProperty.Create(nameof(RowHeightPerInterval), typeof(double), typeof(CustomSchedularControl), defaultBindingMode: BindingMode.TwoWay,
@@ -269,9 +273,10 @@ public partial class CustomSchedularControl
 
             Grid.SetRow(_currentTimeDashedLine, startRow);
             Grid.SetColumnSpan(_currentTimeDashedLine, 3);
-            SchedularGrid.Children.Remove(_currentTimeDashedLine);
+            if (SchedularGrid.Children.Contains(_currentTimeDashedLine))
+                SchedularGrid.Children.Remove(_currentTimeDashedLine);
             SchedularGrid.Children.Add(_currentTimeDashedLine);
-            var zindex = _currentTimeDashedLine.ZIndex;
+            
             if (_firstTimeScrollingDone == false)
             {
                 _firstTimeScrollingDone = true;

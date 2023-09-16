@@ -6,9 +6,11 @@
     xmlns:helpers="clr-namespace:CustomSchedularControl.Controls.CustomSchedular"
     Margin="0,0,10,0"
     Padding="0"
+    HasShadow="False"
     HeightRequest="60"
     IsClippedToBounds="True"
-    VerticalOptions="Start">
+    VerticalOptions="Start"
+    ZIndex="1">
     <Grid
         x:Name="BaseGrid"
         ColumnDefinitions="7,*"
@@ -26,7 +28,8 @@
                 Margin="0,0,5,0"
                 ColumnDefinitions="Auto,Auto"
                 ColumnSpacing="5"
-                HorizontalOptions="End">
+                HorizontalOptions="End"
+                VerticalOptions="End">
                 <Path
                     x:Name="PathClockIcon"
                     helpers:Helper.StringPathData="{x:Static helpers:Helper.FilledClock}"

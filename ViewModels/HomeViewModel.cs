@@ -70,8 +70,8 @@ namespace CustomSchedularControl.ViewModels
             SchedularItems.Add(new SchedularItemModel
             {
                 CardLineColor = Colors.Coral,
-                StartTime = new DateTime(2023, 9, 10, 18, 10, 0),
-                EndTime = new DateTime(2023, 9, 10, 19, 35, 0),
+                StartTime = new DateTime(2023, 9, 10, 15, 55, 0),
+                EndTime = new DateTime(2023, 9, 10, 16, 55, 0),
                 Title = "Title 6",
                 Description = "Lorem Ipsum Dolor sit amet, Lorem Ipsum dolor sit amet..."
             });
