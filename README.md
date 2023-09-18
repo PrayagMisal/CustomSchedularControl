@@ -11,5 +11,4 @@ Some know issue and work in progress is
 
 Tested so far in android only...
 # Screenshots
-<img src="https://github.com/PrayagMisal/CustomSchedularControl/blob/master/pic1.png" width="280" height="500">
-<img src="https://github.com/PrayagMisal/CustomSchedularControl/blob/master/demo.gif" width="280" height="500">
+<img src="https://github.com/PrayagMisal/CustomSchedularControl/blob/master/pic1.png" width="280" height="500"><img src="https://github.com/PrayagMisal/CustomSchedularControl/blob/master/demo.gif" width="280" height="500">
