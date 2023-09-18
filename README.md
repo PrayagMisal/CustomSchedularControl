@@ -14,4 +14,4 @@ Tested so far in android only...
 <img src="https://github.com/PrayagMisal/CustomSchedularControl/blob/master/pic1.png" width="280" height="500">
 
 # Demo GIF
-<img src="https://github.com/PrayagMisal/CustomSchedularControl/blob/master/demo.gif" width="280" height="500">
+![](https://github.com/PrayagMisal/CustomSchedularControl/blob/master/demo.gif)
