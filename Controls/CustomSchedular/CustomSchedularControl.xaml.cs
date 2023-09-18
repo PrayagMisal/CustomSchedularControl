@@ -72,7 +72,7 @@ public partial class CustomSchedularControl
 
     private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
-        MainThread.InvokeOnMainThreadAsync(() => 
+        MainThread.InvokeOnMainThreadAsync(() =>
         {
             AddCurrentTimeLine();
         });
@@ -219,13 +219,17 @@ public partial class CustomSchedularControl
     {
         try
         {
+            //EndTime should be greater then start time...
+            if (schedularItemModel.EndTime <= schedularItemModel.StartTime)
+                return;
+
             PlacementInfo placementInfo = GetPlacementInfo(schedularItemModel);
             Frame schedularContentView = placementInfo.HeightOfCard < 70 ? new SchedularContentViewForLessDuration(schedularItemModel)
                 : new SchedularContentView(schedularItemModel);
             Grid.SetRow(schedularContentView, placementInfo.StartRowNumber);
             Grid.SetRowSpan(schedularContentView, schedularContentView is SchedularContentView ? placementInfo.RowSpan : 2);
             Grid.SetColumn(schedularContentView, 2);
-            schedularContentView.Margin = new Thickness(0, placementInfo.TopMargin, 0, schedularContentView is SchedularContentView ? placementInfo.BottomMargin : 0);
+            schedularContentView.Margin = new Thickness(placementInfo.LeftMargin, placementInfo.TopMargin, 0, schedularContentView is SchedularContentView ? placementInfo.BottomMargin : 0);
             SchedularGrid.Children.Add(schedularContentView);
             //Right now we are not using mvvm pattern in view but, it's for finding the item...
             schedularContentView.BindingContext = schedularItemModel;
@@ -276,7 +280,7 @@ public partial class CustomSchedularControl
             if (SchedularGrid.Children.Contains(_currentTimeDashedLine))
                 SchedularGrid.Children.Remove(_currentTimeDashedLine);
             SchedularGrid.Children.Add(_currentTimeDashedLine);
-            
+
             if (_firstTimeScrollingDone == false)
             {
                 _firstTimeScrollingDone = true;
@@ -302,7 +306,7 @@ public partial class CustomSchedularControl
         DateTime endTime = schedularItemModel.EndTime;
 
         int startRow, endRow, rowspan = 1;
-        double topMargin, bottomMargin, heightOfCard;
+        double topMargin, bottomMargin, heightOfCard, leftMargin = 0;
 
         startRow = startTime switch
         {
@@ -326,6 +330,15 @@ public partial class CustomSchedularControl
         topMargin = (topPercentage * RowHeightPerInterval) / 100;
         bottomMargin = (bottomPercentage * RowHeightPerInterval) / 100;
 
+        //SchedularItemModel itemToBeOverlapped = _schedularItems.FirstOrDefault(s => (startTime >= s.StartTime && startTime <= s.EndTime) || (endTime >= s.StartTime && endTime <= s.EndTime));
+        SchedularItemModel itemToBeOverlapped = _schedularItemsFrame.Select(s => s.BindingContext as SchedularItemModel).FirstOrDefault(s => (startTime >= s.StartTime && startTime <= s.EndTime) || (endTime >= s.StartTime && endTime <= s.EndTime));
+        if (itemToBeOverlapped is not null)
+        {
+            Frame frameToBeOverlapped = _schedularItemsFrame.FirstOrDefault(s => s.BindingContext == itemToBeOverlapped);
+            if (frameToBeOverlapped is not null)
+                leftMargin = frameToBeOverlapped.Margin.Left + 10;
+        }
+
         //Getting how many rows it will cover...
         int i = startRow;
         while (i < endRow)
@@ -334,8 +347,9 @@ public partial class CustomSchedularControl
             i++;
         }
 
+        int actualRowspanForConsideration = rowspan > 1 ? (rowspan - (rowspan / 2)) : rowspan;
         //Calculating the height of card...
-        heightOfCard = (RowHeightPerInterval * rowspan) - (topMargin + bottomMargin);
+        heightOfCard = (RowHeightPerInterval * actualRowspanForConsideration) - (topMargin + bottomMargin);
 
         //if (rowspan > 1)
         //    rowspan = rowspan + (rowspan - 1);
@@ -347,7 +361,8 @@ public partial class CustomSchedularControl
             TopMargin = topMargin,
             BottomMargin = bottomMargin,
             RowSpan = rowspan,
-            HeightOfCard = heightOfCard
+            HeightOfCard = heightOfCard,
+            LeftMargin = leftMargin
         };
     }
 

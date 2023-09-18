@@ -75,6 +75,22 @@ namespace CustomSchedularControl.ViewModels
                 Title = "Title 6",
                 Description = "Lorem Ipsum Dolor sit amet, Lorem Ipsum dolor sit amet..."
             });
+            SchedularItems.Add(new SchedularItemModel
+            {
+                CardLineColor = Colors.Khaki,
+                StartTime = new DateTime(2023, 9, 10, 6, 59, 0),
+                EndTime = new DateTime(2023, 9, 10, 7, 25, 0),
+                Title = "Title 7",
+                Description = "Lorem Ipsum Dolor sit amet, Lorem Ipsum dolor sit amet..."
+            });
+            SchedularItems.Add(new SchedularItemModel
+            {
+                CardLineColor = Colors.Black,
+                StartTime = new DateTime(2023, 9, 10, 6, 57, 0),
+                EndTime = new DateTime(2023, 9, 10, 7, 10, 0),
+                Title = "Title 8",
+                Description = "Lorem Ipsum Dolor sit amet, Lorem Ipsum dolor sit amet..."
+            });
             //AddItemCommand = new Command(() => 
             //{
             //    SchedularItems.Add(new());
