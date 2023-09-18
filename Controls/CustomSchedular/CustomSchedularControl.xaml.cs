@@ -331,7 +331,8 @@ public partial class CustomSchedularControl
         bottomMargin = (bottomPercentage * RowHeightPerInterval) / 100;
 
         //SchedularItemModel itemToBeOverlapped = _schedularItems.FirstOrDefault(s => (startTime >= s.StartTime && startTime <= s.EndTime) || (endTime >= s.StartTime && endTime <= s.EndTime));
-        SchedularItemModel itemToBeOverlapped = _schedularItemsFrame.Select(s => s.BindingContext as SchedularItemModel).FirstOrDefault(s => (startTime >= s.StartTime && startTime <= s.EndTime) || (endTime >= s.StartTime && endTime <= s.EndTime));
+        List<SchedularItemModel> schedularItems = _schedularItemsFrame.Select(s => s.BindingContext as SchedularItemModel).ToList();
+        SchedularItemModel itemToBeOverlapped = schedularItems.LastOrDefault(s => (startTime >= s.StartTime && startTime <= s.EndTime) || (endTime >= s.StartTime && endTime <= s.EndTime));
         if (itemToBeOverlapped is not null)
         {
             Frame frameToBeOverlapped = _schedularItemsFrame.FirstOrDefault(s => s.BindingContext == itemToBeOverlapped);
